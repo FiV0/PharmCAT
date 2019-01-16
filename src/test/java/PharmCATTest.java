@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -55,8 +54,7 @@ public class PharmCATTest {
         },
         false);
 
-
-    testCalledGenes("CYP2C19");
+    assertCalledGenes("CYP2C19");
     testCalls(DipType.PRINT,  "CYP2C19", "*1/*4B");
 
     testMatchedGroups("citalopram", 1);
@@ -70,11 +68,178 @@ public class PharmCATTest {
         },
         false);
 
-
     assertFalse(s_context.getGeneReport("CYP2C19").isCalled());
 
     testMatchedGroups("citalopram", 0);
     testMatchedGroups("ivacaftor", 0);
+  }
+
+  @Test
+  public void testCyp2c19s11s35() throws Exception {
+    generalTest("test.cyp2c19.s11s35", new String[]{
+            "cyp2c19/s11s35.vcf"
+        },
+        false);
+
+    assertCalledGenes("CYP2C19");
+    testCalls(DipType.PRINT, "CYP2C19", "*11/*35");
+
+    testMatchedGroups("citalopram", 1);
+    testMatchedGroups("escitalopram", 1);
+    testMatchedGroups("imipramine", 1);
+    testMatchedGroups("clomipramine", 1);
+  }
+
+  @Test
+  public void testCyp2c19s11s35rs4244285missing() throws Exception {
+    generalTest("test.cyp2c19.s11s35rs4244285missing", new String[]{
+            "cyp2c19/s11s35rs4244285missing.vcf"
+        },
+        false);
+
+    assertCalledGenes("CYP2C19");
+    testCalls(DipType.PRINT, "CYP2C19", "*1/*2");
+    assertMissingVariant("CYP2C19", "rs4244285");
+
+    testMatchedGroups("citalopram", 1);
+    testMatchedGroups("escitalopram", 1);
+    testMatchedGroups("imipramine", 1);
+    testMatchedGroups("clomipramine", 1);
+  }
+
+  @Test
+  public void testCyp2c19s2hets11missing() throws Exception {
+    generalTest("test.cyp2c19.s2hets11missing", new String[]{
+            "cyp2c19/s2hets11missing.vcf"
+        },
+        false);
+
+    assertCalledGenes("CYP2C19");
+    testCalls(DipType.PRINT, "CYP2C19", "*1/*2");
+    assertMissingVariant("CYP2C19", "rs58973490");
+    assertUncallableAllele("CYP2C19", "*11");
+
+    testMatchedGroups("citalopram", 1);
+    testMatchedGroups("escitalopram", 1);
+    testMatchedGroups("imipramine", 1);
+    testMatchedGroups("clomipramine", 1);
+  }
+
+  @Test
+  public void testCyp2c19s2hets11s35missing() throws Exception {
+    generalTest("test.cyp2c19.s2hets11s35missing", new String[]{
+            "cyp2c19/s2hets11s35missing.vcf"
+        },
+        false);
+
+    assertCalledGenes("CYP2C19");
+    testCalls(DipType.PRINT, "CYP2C19", "*1/*2");
+    assertMissingVariant("CYP2C19", "rs12769205");
+    assertMissingVariant("CYP2C19", "rs58973490");
+    assertUncallableAllele("CYP2C19", "*11");
+    assertUncallableAllele("CYP2C19", "*35");
+
+    testMatchedGroups("citalopram", 1);
+    testMatchedGroups("escitalopram", 1);
+    testMatchedGroups("imipramine", 1);
+    testMatchedGroups("clomipramine", 1);
+  }
+
+  @Test
+  public void testCyp2c19s2homos11het() throws Exception {
+    generalTest("test.cyp2c19.s2homos11het", new String[]{
+            "cyp2c19/s2homos11het.vcf"
+        },
+        false);
+
+    assertCalledGenes("CYP2C19");
+    testCalls(DipType.PRINT, "CYP2C19", "*2/*2");
+
+    testMatchedGroups("citalopram", 1);
+    testMatchedGroups("escitalopram", 1);
+    testMatchedGroups("imipramine", 1);
+    testMatchedGroups("clomipramine", 1);
+  }
+
+  @Test
+  public void testCyp2c19s2homos11s17het() throws Exception {
+    generalTest("test.cyp2c19.s2homos11s17het", new String[]{
+            "cyp2c19/s2homos11s17het.vcf"
+        },
+        false);
+
+    assertFalse(s_context.getGeneReport("CYP2C19").isCalled());
+
+    testMatchedGroups("citalopram", 0);
+    testMatchedGroups("escitalopram", 0);
+    testMatchedGroups("imipramine", 0);
+    testMatchedGroups("clomipramine", 0);
+  }
+
+  @Test
+  public void testCyp2c19s2s11het() throws Exception {
+    generalTest("test.cyp2c19.s2s11het", new String[]{
+            "cyp2c19/s2s11het.vcf"
+        },
+        false);
+
+    assertCalledGenes("CYP2C19");
+    testCalls(DipType.PRINT, "CYP2C19", "*1/*2");
+
+    testMatchedGroups("citalopram", 1);
+    testMatchedGroups("escitalopram", 1);
+    testMatchedGroups("imipramine", 1);
+    testMatchedGroups("clomipramine", 1);
+  }
+
+  @Test
+  public void testCyp2c19s2s11hetrs12769205missing() throws Exception {
+    generalTest("test.cyp2c19.s2s11hetrs12769205missing", new String[]{
+            "cyp2c19/s2s11hetrs12769205missing.vcf"
+        },
+        false);
+
+    assertCalledGenes("CYP2C19");
+    testCalls(DipType.PRINT, "CYP2C19", "*1/*2");
+    assertMissingVariant("CYP2C19", "rs12769205");
+
+    testMatchedGroups("citalopram", 1);
+    testMatchedGroups("escitalopram", 1);
+    testMatchedGroups("imipramine", 1);
+    testMatchedGroups("clomipramine", 1);
+  }
+
+  @Test
+  public void testCyp2c19s2s2s11s17het() throws Exception {
+    generalTest("test.cyp2c19.s2s11s17het", new String[]{
+            "cyp2c19/s2s11s17het.vcf"
+        },
+        false);
+
+    assertCalledGenes("CYP2C19");
+    testCalls(DipType.PRINT, "CYP2C19", "*2/*17");
+
+    testMatchedGroups("citalopram", 1);
+    testMatchedGroups("escitalopram", 1);
+    testMatchedGroups("imipramine", 1);
+    testMatchedGroups("clomipramine", 1);
+  }
+
+  @Test
+  public void testCyp2c19s2s11s17rs12769205missing() throws Exception {
+    generalTest("test.cyp2c19.s2s11s17rs12769205missing", new String[]{
+            "cyp2c19/s2s11s17rs12769205missing.vcf"
+        },
+        false);
+
+    assertCalledGenes("CYP2C19");
+    testCalls(DipType.PRINT, "CYP2C19", "*2/*17");
+    assertMissingVariant("CYP2C19", "rs12769205");
+
+    testMatchedGroups("citalopram", 1);
+    testMatchedGroups("escitalopram", 1);
+    testMatchedGroups("imipramine", 1);
+    testMatchedGroups("clomipramine", 1);
   }
 
   @Test
@@ -84,7 +249,7 @@ public class PharmCATTest {
         },
         true);
 
-    testCalledGenes("CYP2C19", "CYP2D6");
+    assertCalledGenes("CYP2C19", "CYP2D6");
 
     testCalls(DipType.PRINT, "CYP2D6", "*1/*4");
     testCalls(DipType.PRINT, "CYP2C19", "*1/*4B");
@@ -99,7 +264,7 @@ public class PharmCATTest {
         },
         false);
 
-    testCalledGenes("CFTR");
+    assertCalledGenes("CFTR");
     testCalls(DipType.PRINT, "CFTR", "F508del(CTT)/G542X");
     testCalls(DipType.LOOKUP, "CFTR", "CFTR:F508del(CTT)/Other");
 
@@ -113,7 +278,7 @@ public class PharmCATTest {
         },
         false);
 
-    testCalledGenes("CFTR");
+    assertCalledGenes("CFTR");
     testCalls(DipType.PRINT, "CFTR", "No CPIC variants found");
     testCalls(DipType.LOOKUP, "CFTR", "CFTR:Other/Other");
 
@@ -127,7 +292,7 @@ public class PharmCATTest {
         },
         false);
 
-    testCalledGenes("CFTR");
+    assertCalledGenes("CFTR");
     testCalls(DipType.PRINT, "CFTR", "F508del(CTT) (heterozygous)");
     testCalls(DipType.LOOKUP, "CFTR", "CFTR:F508del(CTT)/Other");
 
@@ -141,7 +306,7 @@ public class PharmCATTest {
         },
         false);
 
-    testCalledGenes("CFTR");
+    assertCalledGenes("CFTR");
     testCalls(DipType.PRINT, "CFTR", "F508del(CTT)/F508del(CTT)");
     testCalls(DipType.LOOKUP, "CFTR", "CFTR:F508del(CTT)/F508del(CTT)");
 
@@ -159,7 +324,7 @@ public class PharmCATTest {
         },
         false);
 
-    testCalledGenes("CFTR");
+    assertCalledGenes("CFTR");
     testCalls(DipType.PRINT, "CFTR", "F508del(CTT) (heterozygous)");
     testCalls(DipType.LOOKUP, "CFTR", "CFTR:F508del(CTT)/Other");
 
@@ -173,15 +338,9 @@ public class PharmCATTest {
         },
         false);
     
-    GeneReport gene = s_context.getGeneReport("CFTR");
-    VariantReport variant = gene.getVariantReports().stream()
-        .filter(v -> v.getDbSnpId().equals("rs121908745"))
-        .findFirst()
-        .orElseThrow(() -> new RuntimeException("rs121908745 should exist"));
-    assertTrue(variant.isMissing());
-    
+    assertMissingVariant("CFTR", "rs121908745");
 
-    testCalledGenes("CFTR");
+    assertCalledGenes("CFTR");
     assertTrue("Should be no incidental alleles", s_context.getGeneReports().stream().noneMatch(GeneReport::isIncidental));
   }
 
@@ -192,7 +351,7 @@ public class PharmCATTest {
         },
         false);
 
-    testCalledGenes("SLCO1B1");
+    assertCalledGenes("SLCO1B1");
     testCalls(DipType.PRINT, "SLCO1B1", "*17/*21");
     testCalls(DipType.LOOKUP, "SLCO1B1", "SLCO1B1:*17/*21");
 
@@ -206,7 +365,7 @@ public class PharmCATTest {
         },
         false);
 
-    testCalledGenes("SLCO1B1");
+    assertCalledGenes("SLCO1B1");
     testCalls(DipType.PRINT, "SLCO1B1", "*1A/*1A");
     testCalls(DipType.LOOKUP, "SLCO1B1", "SLCO1B1:*1A/*1A");
 
@@ -220,7 +379,7 @@ public class PharmCATTest {
         },
         false);
 
-    testCalledGenes("SLCO1B1");
+    assertCalledGenes("SLCO1B1");
     testCalls(DipType.PRINT, "SLCO1B1", "*5/*15");
     testCalls(DipType.LOOKUP, "SLCO1B1", "SLCO1B1:*5/*15");
 
@@ -234,7 +393,7 @@ public class PharmCATTest {
         },
         false);
 
-    testCalledGenes("SLCO1B1");
+    assertCalledGenes("SLCO1B1");
     testCalls(DipType.PRINT, "SLCO1B1", "*1A/*15");
     testCalls(DipType.LOOKUP, "SLCO1B1", "SLCO1B1:*1A/*15");
 
@@ -249,7 +408,7 @@ public class PharmCATTest {
         },
         false);
 
-    testCalledGenes("DPYD", "TPMT");
+    assertCalledGenes("DPYD", "TPMT");
     assertFalse(s_context.getGeneReport("SLCO1B1").isCalled());
 
     assertTrue("Should be no incidental alleles", s_context.getGeneReports().stream().noneMatch(GeneReport::isIncidental));
@@ -262,7 +421,7 @@ public class PharmCATTest {
         },
         false);
 
-    testCalledGenes("DPYD");
+    assertCalledGenes("DPYD");
     assertTrue(s_context.getGeneReport("DPYD").isCalled());
     testCalls(DipType.PRINT, "DPYD", "Reference/c.1905+1G>A");
     testCalls(DipType.LOOKUP, "DPYD", "DPYD:Any normal function variant or no variant detected/c.1905+1G>A");
@@ -299,7 +458,7 @@ public class PharmCATTest {
         },
         false);
 
-    testCalledGenes("UGT1A1");
+    assertCalledGenes("UGT1A1");
     testCalls(DipType.PRINT, "UGT1A1", "*1/*60");
     testCalls(DipType.LOOKUP, "UGT1A1", "UGT1A1:*1/*60");
 
@@ -315,7 +474,7 @@ public class PharmCATTest {
         },
         false);
 
-    testCalledGenes("UGT1A1");
+    assertCalledGenes("UGT1A1");
     testCalls(DipType.PRINT, "UGT1A1", "*60 (heterozygous)");
     testCalls(DipType.LOOKUP, "UGT1A1", "UGT1A1:*1/*1");
 
@@ -331,7 +490,7 @@ public class PharmCATTest {
         },
         false);
 
-    testCalledGenes("UGT1A1");
+    assertCalledGenes("UGT1A1");
     testCalls(DipType.PRINT, "UGT1A1", "*80+*28 (heterozygous)", "*28 (heterozygous)", "*60 (heterozygous)");
     testCalls(DipType.LOOKUP, "UGT1A1", "UGT1A1:*1/*80");
 
@@ -347,7 +506,7 @@ public class PharmCATTest {
         },
         false);
 
-    testCalledGenes("UGT1A1");
+    assertCalledGenes("UGT1A1");
     testCalls(DipType.PRINT, "UGT1A1", "*28 (heterozygous)", "*37 (heterozygous)");
     testCalls(DipType.LOOKUP, "UGT1A1", "UGT1A1:*80/*80");
 
@@ -363,7 +522,7 @@ public class PharmCATTest {
         },
         false);
 
-    testCalledGenes("UGT1A1");
+    assertCalledGenes("UGT1A1");
     testCalls(DipType.PRINT, "UGT1A1", "*1/*28+*80");
     testCalls(DipType.LOOKUP, "UGT1A1", "UGT1A1:*1/*80");
 
@@ -379,7 +538,7 @@ public class PharmCATTest {
         },
         false);
 
-    testCalledGenes("UGT1A1");
+    assertCalledGenes("UGT1A1");
     testCalls(DipType.PRINT, "UGT1A1", "*6+*60/*28+*80");
     testCalls(DipType.LOOKUP, "UGT1A1", "UGT1A1:*80/*80");
 
@@ -395,7 +554,7 @@ public class PharmCATTest {
         },
         false);
 
-    testCalledGenes("UGT1A1");
+    assertCalledGenes("UGT1A1");
     testCalls(DipType.PRINT, "UGT1A1", "*80+*28 (heterozygous)","*28 (heterozygous)","*6 (heterozygous)","*60 (heterozygous)");
     testCalls(DipType.LOOKUP, "UGT1A1", "UGT1A1:*80/*80");
 
@@ -411,7 +570,7 @@ public class PharmCATTest {
         },
         false);
 
-    testCalledGenes("UGT1A1");
+    assertCalledGenes("UGT1A1");
     testCalls(DipType.PRINT, "UGT1A1", "*80+*28 (heterozygous)", "*28 (heterozygous)");
     testCalls(DipType.LOOKUP, "UGT1A1", "UGT1A1:*1/*80");
 
@@ -427,7 +586,7 @@ public class PharmCATTest {
         },
         false);
 
-    testCalledGenes("UGT1A1");
+    assertCalledGenes("UGT1A1");
     testCalls(DipType.PRINT, "UGT1A1", "*6/*6");
     testCalls(DipType.LOOKUP, "UGT1A1", "UGT1A1:*6/*6");
 
@@ -443,7 +602,7 @@ public class PharmCATTest {
         },
         false);
 
-    testCalledGenes("UGT1A1");
+    assertCalledGenes("UGT1A1");
     testCalls(DipType.PRINT, "UGT1A1", "*6/*28+*37+*60+*80");
     testCalls(DipType.LOOKUP, "UGT1A1", "UGT1A1:*80/*80");
 
@@ -459,7 +618,7 @@ public class PharmCATTest {
         },
         false);
 
-    testCalledGenes("UGT1A1");
+    assertCalledGenes("UGT1A1");
     testCalls(DipType.PRINT, "UGT1A1", "*6 (heterozygous)","*60 (heterozygous)","*80+*28 (heterozygous)","*80+*37 (heterozygous)");
     testCalls(DipType.LOOKUP, "UGT1A1", "UGT1A1:*80/*80");
 
@@ -475,7 +634,7 @@ public class PharmCATTest {
         },
         false);
 
-    testCalledGenes("UGT1A1");
+    assertCalledGenes("UGT1A1");
     testCalls(DipType.PRINT, "UGT1A1", "*80+*28 (heterozygous)", "*80+*37 (heterozygous)");
     testCalls(DipType.LOOKUP, "UGT1A1", "UGT1A1:*1/*80");
 
@@ -491,7 +650,7 @@ public class PharmCATTest {
         },
         false);
 
-    testCalledGenes("UGT1A1");
+    assertCalledGenes("UGT1A1");
     testCalls(DipType.PRINT, "UGT1A1", "*80+*28 (heterozygous)", "*60 (heterozygous)", "*28 (heterozygous)");
     testCalls(DipType.LOOKUP, "UGT1A1", "UGT1A1:*1/*80");
 
@@ -507,7 +666,7 @@ public class PharmCATTest {
         },
         false);
 
-    testCalledGenes("UGT1A1");
+    assertCalledGenes("UGT1A1");
     testCalls(DipType.PRINT, "UGT1A1", "*80+*28 (heterozygous)", "*60 (heterozygous)", "*60 (homozygous)", "*28 (heterozygous)");
     testCalls(DipType.LOOKUP, "UGT1A1", "UGT1A1:*1/*80");
 
@@ -539,7 +698,7 @@ public class PharmCATTest {
         },
         false);
 
-    testCalledGenes("UGT1A1");
+    assertCalledGenes("UGT1A1");
     testCalls(DipType.PRINT, "UGT1A1", "*28+*80/*28+*80");
     testCalls(DipType.LOOKUP, "UGT1A1", "UGT1A1:*80/*80");
 
@@ -564,7 +723,7 @@ public class PharmCATTest {
         },
         false);
 
-    testCalledGenes("UGT1A1");
+    assertCalledGenes("UGT1A1");
     testCalls(DipType.PRINT, "UGT1A1", "*28 (heterozygous)", "*60 (homozygous)", "*60 (heterozygous)");
     testCalls(DipType.LOOKUP, "UGT1A1", "UGT1A1:*1/*80");
 
@@ -581,7 +740,7 @@ public class PharmCATTest {
         },
         false);
 
-    testCalledGenes("UGT1A1");
+    assertCalledGenes("UGT1A1");
     testCalls(DipType.PRINT, "UGT1A1", "*27 (heterozygous)", "*28 (heterozygous)", "*80+*28 (heterozygous)");
     testCalls(DipType.LOOKUP, "UGT1A1", "UGT1A1:*80/*80");
 
@@ -597,7 +756,7 @@ public class PharmCATTest {
         },
         false);
 
-    testCalledGenes("UGT1A1");
+    assertCalledGenes("UGT1A1");
     testCalls(DipType.PRINT, "UGT1A1", "*28 (heterozygous)", "*60 (heterozygous)", "*60 (homozygous)", "*80+*28 (heterozygous)");
     testCalls(DipType.LOOKUP, "UGT1A1", "UGT1A1:*1/*80");
 
@@ -613,7 +772,7 @@ public class PharmCATTest {
         },
         false);
 
-    testCalledGenes("UGT1A1");
+    assertCalledGenes("UGT1A1");
     testCalls(DipType.PRINT, "UGT1A1", "*1/*27+*28+*60+*80");
     testCalls(DipType.LOOKUP, "UGT1A1", "UGT1A1:*1/*80");
 
@@ -630,7 +789,11 @@ public class PharmCATTest {
         },
         false);
 
-    testCalledGenes("UGT1A1");
+    assertCalledGenes("UGT1A1");
+    assertUncallableAllele("UGT1A1", "*28");
+    assertUncallableAllele("UGT1A1", "*36");
+    assertUncallableAllele("UGT1A1", "*37");
+    assertMissingVariant("UGT1A1", "chr2", 233760233);
     testCalls(DipType.PRINT, "UGT1A1", "*1/*27+*28+*37+*60+*80");
     testCalls(DipType.LOOKUP, "UGT1A1", "UGT1A1:*1/*80");
 
@@ -647,7 +810,7 @@ public class PharmCATTest {
         },
         false);
 
-    testCalledGenes("UGT1A1");
+    assertCalledGenes("UGT1A1");
     testCalls(DipType.PRINT, "UGT1A1", "*1/*6+*60");
     testCalls(DipType.LOOKUP, "UGT1A1", "UGT1A1:*1/*80");
 
@@ -664,7 +827,7 @@ public class PharmCATTest {
         },
         false);
 
-    testCalledGenes("UGT1A1");
+    assertCalledGenes("UGT1A1");
     testCalls(DipType.PRINT, "UGT1A1", "*1/*6+*28+*60+*80");
     testCalls(DipType.LOOKUP, "UGT1A1", "UGT1A1:*1/*80");
 
@@ -681,7 +844,7 @@ public class PharmCATTest {
         },
         false);
 
-    testCalledGenes("UGT1A1");
+    assertCalledGenes("UGT1A1");
     testCalls(DipType.PRINT, "UGT1A1", "*1/*37+*60+*80");
     testCalls(DipType.LOOKUP, "UGT1A1", "UGT1A1:*1/*80");
 
@@ -700,13 +863,13 @@ public class PharmCATTest {
         },
         false);
 
-    testCalledGenes(gene);
+    assertCalledGenes(gene);
     testCalls(DipType.PRINT, gene, "*1/*1");
     testCalls(DipType.LOOKUP, gene, "CYP3A5:*1/*1");
 
     // rs776746 should be missing from this report
     assertNotNull(s_context.getGeneReport(gene).getVariantReports());
-    assertTrue(s_context.getGeneReport(gene).getVariantReports().stream().anyMatch(v -> v.isMissing() && v.getDbSnpId().equals("rs776746")));
+    assertMissingVariant("CYP3A5", "rs776746");
 
     // the guideline should have a matching message
     assertTrue(s_context.getGuidelineReports().stream()
@@ -725,7 +888,7 @@ public class PharmCATTest {
         },
         false);
 
-    testCalledGenes("TPMT");
+    assertCalledGenes("TPMT");
     testCalls(DipType.PRINT, "TPMT", "*1/*3A");
     testCalls(DipType.LOOKUP, "TPMT", "TPMT:*1/*3A");
 
@@ -749,7 +912,7 @@ public class PharmCATTest {
         },
         false);
 
-    testNotCalledGenes("TPMT");
+    assertUncalledGenes("TPMT");
     GeneReport report = s_context.getGeneReport("TPMT");
     assertTrue(report.getVariantReports().stream().filter(r -> r.getPosition() == 18133890).allMatch(VariantReport::isMismatch));
   }
@@ -772,7 +935,7 @@ public class PharmCATTest {
         },
         true);
 
-    testCalledGenes("DPYD", "UGT1A1", "TPMT", "CYP3A5", "CFTR", "CYP2C19",
+    assertCalledGenes("DPYD", "UGT1A1", "TPMT", "CYP3A5", "CFTR", "CYP2C19",
         "CYP2C9", "SLCO1B1", "VKORC1", "CYP4F2", "IFNL3", "CYP2D6");
     testCalls(DipType.PRINT, "TPMT", "*1/*1");
     testCalls(DipType.PRINT, "DPYD", "No CPIC decreased or no function variant with strong or moderate evidence found");
@@ -818,7 +981,7 @@ public class PharmCATTest {
         geneReport.printDisplayCalls()
         : new ArrayList<>(geneReport.getDiplotypeLookupKeys());
 
-    assertEquals(gene + " call count doesn't match " + dips.stream().collect(Collectors.joining(";")), calls.length, dips.size());
+    assertEquals(gene + " call count doesn't match " + String.join(";", dips), calls.length, dips.size());
 
     Arrays.stream(calls)
         .forEach(c -> assertTrue(c + " not in "+type+" for " + gene + ":" + dips + printDiagnostic(geneReport), dips.contains(c)));
@@ -837,7 +1000,7 @@ public class PharmCATTest {
   /**
    * Check to see if all the given genes have been called
    */
-  private void testCalledGenes(String... genes) {
+  private void assertCalledGenes(String... genes) {
     assertTrue(genes != null && genes.length > 0);
 
     Arrays.stream(genes)
@@ -847,7 +1010,7 @@ public class PharmCATTest {
   /**
    * Check to see if none ofthe given genes have been called
    */
-  private void testNotCalledGenes(String... genes) {
+  private void assertUncalledGenes(String... genes) {
     assertTrue(genes != null && genes.length > 0);
 
     Arrays.stream(genes)
@@ -869,6 +1032,47 @@ public class PharmCATTest {
     }
   }
 
+  /**
+   * Assert that a variant identified by RSID is in the gene report but marked as missing. Don't use this method if the 
+   * variant has no RSID, 
+   * @param geneSymbol a Gene symbol
+   * @param rsid the dbSNP RSID of the variant
+   */
+  private void assertMissingVariant(String geneSymbol, String rsid) {
+    GeneReport gene = s_context.getGeneReport(geneSymbol);
+    VariantReport variant = gene.getVariantReports().stream()
+        .filter(v -> v.getDbSnpId() != null)
+        .filter(v -> v.getDbSnpId().equals(rsid))
+        .findFirst()
+        .orElseThrow(() -> new RuntimeException(rsid + " record should exist but does not"));
+    assertTrue(variant.isMissing());
+  }
+
+  /**
+   * Assert that a variant identified by chromosome and position is in the gene report but marked as missing
+   * @param geneSymbol a Gene symbol
+   * @param chr a chromosome name in the form "chr##"
+   * @param position the position of the variant
+   */
+  private void assertMissingVariant(String geneSymbol, String chr, int position) {
+    GeneReport gene = s_context.getGeneReport(geneSymbol);
+    VariantReport variant = gene.getVariantReports().stream()
+        .filter(v -> v.getChr().equals(chr) && v.getPosition() == position)
+        .findFirst()
+        .orElseThrow(() -> new RuntimeException(chr + ":" + position + " record should exist but does not"));
+    assertTrue(variant.isMissing());
+  }
+
+  /**
+   * Assert that the given allele un uncallable
+   * @param geneSymbol a Gene symbol
+   * @param allele the name of an allele (e.g. "*2")
+   */
+  private void assertUncallableAllele(String geneSymbol, String allele) {
+    GeneReport gene = s_context.getGeneReport(geneSymbol);
+    assertTrue(gene.getUncalledHaplotypes().contains(allele));
+  }
+  
   private enum DipType {
     PRINT, // the diplotype that is displayed to the end-user
     LOOKUP // the diplotype used to lookup annotations

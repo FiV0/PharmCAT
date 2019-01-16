@@ -591,6 +591,55 @@ public class SyntheticBatchTest {
     sf_testVcfs.put("dpyd.novariant", new String[]{
         "DPYD/novariant.vcf"
     });
+
+    sf_testVcfs.put("cyp2c19.s2s11s17rs12769205missing", new String[]{
+        "CYP2C19/s2s11s17rs12769205missing.vcf"
+    });
+
+
+    sf_testVcfs.put("cyp2c19.s2s11s17het", new String[]{
+        "CYP2C19/s2s11s17het.vcf"
+    });
+
+
+    sf_testVcfs.put("cyp2c19.s2s11hetrs12769205missing", new String[]{
+        "CYP2C19/s2s11hetrs12769205missing.vcf"
+    });
+
+
+    sf_testVcfs.put("cyp2c19.s2s11het", new String[]{
+        "CYP2C19/s2s11het.vcf"
+    });
+
+
+    sf_testVcfs.put("cyp2c19.s2homos11s17het", new String[]{
+        "CYP2C19/s2homos11s17het.vcf"
+    });
+
+
+    sf_testVcfs.put("cyp2c19.s2homos11het", new String[]{
+        "CYP2C19/s2homos11het.vcf"
+    });
+
+
+    sf_testVcfs.put("cyp2c19.s2hets11s35missing", new String[]{
+        "CYP2C19/s2hets11s35missing.vcf"
+    });
+
+
+    sf_testVcfs.put("cyp2c19.s2hets11missing", new String[]{
+        "CYP2C19/s2hets11missing.vcf"
+    });
+
+
+    sf_testVcfs.put("cyp2c19.s11s35rs4244285missing", new String[]{
+        "CYP2C19/s11s35rs4244285missing.vcf"
+    });
+
+
+    sf_testVcfs.put("cyp2c19.s11s35", new String[]{
+        "CYP2C19/s11s35.vcf"
+    });
   }
 
   private PharmCAT m_pharmcat;
