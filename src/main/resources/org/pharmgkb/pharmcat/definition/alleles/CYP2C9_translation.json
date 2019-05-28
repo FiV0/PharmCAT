@@ -187,7 +187,7 @@
       "position": 94942234,
       "rsid": "rs72558189",
       "chromosomeHgvsName": "g.94942234G>A; g.94942234G>T",
-      "geneHgvsName": "g.8577G>A; g.8577G>A",
+      "geneHgvsName": "g.8577G>A; g.8577G>T",
       "proteinNote": "R125H; R125L",
       "resourceNote": "3552G>A; 3552G>T",
       "type": "SNP",
