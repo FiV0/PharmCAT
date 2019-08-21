@@ -41,6 +41,7 @@ public class PharmCAT {
     CliHelper cliHelper = new CliHelper(MethodHandles.lookup().lookupClass())
         .addOption("vcf", "sample-file", "input call file (VCF)", true, "vcf")
         .addOption("o", "output-dir", "directory to output to", true, "o")
+        .addOption("ot", "output-type", "optional, output file type 'html'(default) or 'pdf'", false, "ot")
         .addOption("f", "output-file", "the base name used for ouput file names (will add file extensions), will default to same value as call-file if not specified", false, "f")
         .addOption("a", "astrolabe-file", "path to astrolabe result file (TSV)", false, "a")
         // optional data
@@ -57,6 +58,11 @@ public class PharmCAT {
 
       Path vcfFile = cliHelper.getValidFile("vcf", true);
       Path outputDir = cliHelper.getValidDirectory("o", true);
+      String outputType = cliHelper.hasOption("ot") ? cliHelper.getValue("ot") : "html";
+      if (!outputType.equals("html") && !outputType.equals("pdf")) {
+        throw new IOException("Output type different from 'html' and 'pdf'!");
+      }
+
       Path astrolabeFile = null;
       if (cliHelper.hasOption("a")) {
         astrolabeFile = cliHelper.getPath("a");
@@ -83,7 +89,7 @@ public class PharmCAT {
 
       pharmcat
           .writeJson(cliHelper.hasOption("j"))
-          .execute(vcfFile, astrolabeFile, outputFile);
+          .execute(vcfFile, astrolabeFile, outputFile, outputType);
 
     } catch (Exception e) {
       e.printStackTrace();
@@ -143,7 +149,8 @@ public class PharmCAT {
    * @param outputFile the optional name to write the output to
    * @throws Exception can occur from file I/O or unexpected state
    */
-  public void execute(@Nonnull Path vcfFile, @Nullable Path astrolabeFile, @Nullable String outputFile) throws Exception {
+  public void execute(@Nonnull Path vcfFile, @Nullable Path astrolabeFile,
+      @Nullable String outputFile, @Nullable String outputType) throws Exception {
     Preconditions.checkArgument(Files.isRegularFile(vcfFile), "Not a file: %s", vcfFile);
 
     sf_logger.info("Run time: " + new Date());
@@ -163,9 +170,14 @@ public class PharmCAT {
 
     m_reporter.analyze(callFile, astrolabeFile);
 
-    Path reportPath = m_outputDir.resolve(fileRoot + ".report.html");
+    Path reportPath = null;
+    if (outputType == null || outputType == "html") {
+      reportPath = m_outputDir.resolve(fileRoot + ".report.html");
+    } else {
+      reportPath = m_outputDir.resolve(fileRoot + ".report.pdf");
+    }
     Path jsonPath = m_writeJsonReport ? m_outputDir.resolve(fileRoot + ".report.json") : null;
-    m_reporter.printHtml(reportPath, fileRoot, jsonPath);
+    m_reporter.printReport(reportPath, fileRoot, jsonPath, outputType);
 
     if (!m_keepMatcherOutput) {
       FileUtils.deleteQuietly(callFile.toFile());
@@ -227,7 +239,7 @@ public class PharmCAT {
     Preconditions.checkArgument(
         outputDir.toFile().exists() || outputDir.toFile().isDirectory(),
         "Specified output isn't a directory: " + outputDir.toAbsolutePath());
-    
+
     m_outputDir = outputDir;
   }
 }

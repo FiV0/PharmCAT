@@ -2,11 +2,15 @@ package org.pharmgkb.pharmcat.reporter;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.lang.invoke.MethodHandles;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -21,6 +25,7 @@ import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.google.common.base.Preconditions;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
 import org.apache.commons.lang3.StringUtils;
 import org.pharmgkb.common.io.util.CliHelper;
 import org.pharmgkb.common.util.PathUtils;
@@ -64,7 +69,8 @@ public class Reporter {
     CliHelper cliHelper = new CliHelper(MethodHandles.lookup().lookupClass())
         .addOption("c", "call-file", "named allele call JSON file", true, "c")
         .addOption("a", "astrolabe-file", "optional, astrolabe call file", false, "a")
-        .addOption("o", "output-file", "file path to write HTML report to", true, "o")
+        .addOption("o", "output-file", "file path to write HTML/PDF report to", true, "o")
+        .addOption("ot", "output-type", "optional, output file type 'html'(default) or 'pdf'", false, "ot")
         .addOption("t", "title", "optional, text to add to the report title", false, "t")
         .addOption("g", "guidelines-dir", "directory of guideline annotations (JSON files)", false, "n")
         ;
@@ -82,10 +88,15 @@ public class Reporter {
       Path astrolabeFile = cliHelper.hasOption("a") ? cliHelper.getValidFile("a", true) : null;
       Path outputFile = cliHelper.getPath("o");
       String title = cliHelper.getValue("t");
+      String outputType = cliHelper.hasOption("ot") ? cliHelper.getValue("ot") : "html";
+
+      if (outputType != "html" && outputType != "pdf") {
+        throw new IOException("Output type different from 'html' and 'pdf'!");
+      }
 
       new Reporter(guidelinesDir)
           .analyze(callFile, astrolabeFile)
-          .printHtml(outputFile, title, null);
+          .printReport(outputFile, title, null, outputType);
 
     } catch (Exception ex) {
       ex.printStackTrace();
@@ -153,10 +164,11 @@ public class Reporter {
   }
 
   /**
-   * Print a HTML file of compiled report data
+   * Print a HTML or PDF file of compiled report data
    * @param reportFile file to write output to
    */
-  public void printHtml(@Nonnull Path reportFile, @Nullable String title, @Nullable Path jsonFile) throws IOException {
+  public void printReport(@Nonnull Path reportFile, @Nullable String title, @Nullable Path jsonFile,
+      @Nullable String outputType) throws IOException, Exception {
 
     Map<String,Object> reportData = ReportData.compile(m_reportContext);
 
@@ -164,7 +176,7 @@ public class Reporter {
       reportData.put("title", title);
     }
 
-    writeFinalReport(reportData, reportFile);
+    writeFinalReport(reportData, reportFile, outputType);
 
     if (jsonFile != null) {
       try (BufferedWriter writer = Files.newBufferedWriter(jsonFile, StandardCharsets.UTF_8)) {
@@ -179,15 +191,26 @@ public class Reporter {
    * @param data a Map of data from the reporter system
    * @param filePath the path to write the report to
    */
-  public static void writeFinalReport(@Nonnull Map<String,Object> data, @Nonnull Path filePath) throws IOException {
+  public static void writeFinalReport(@Nonnull Map<String,Object> data, @Nonnull Path filePath,
+      @Nullable String outputType) throws IOException, Exception {
     Handlebars handlebars = new Handlebars(new ClassPathTemplateLoader(sf_templatePrefix));
     StringHelpers.register(handlebars);
     handlebars.registerHelpers(ReportHelpers.class);
     Template template = handlebars.compile(FINAL_REPORT);
 
     String html = template.apply(data);
-    try (BufferedWriter writer = Files.newBufferedWriter(filePath, StandardCharsets.UTF_8)) {
-      writer.write(html);
+    if (outputType == null || outputType == "html") {
+      try (BufferedWriter writer = Files.newBufferedWriter(filePath, StandardCharsets.UTF_8)) {
+        writer.write(html);
+      }
+    } else {
+      try (OutputStream os = new FileOutputStream(filePath.toString())) {
+        PdfRendererBuilder builder = new PdfRendererBuilder();
+        builder.useFastMode();
+        builder.withHtmlContent(html, null);
+        builder.toStream(os);
+        builder.run();
+      }
     }
   }
 
